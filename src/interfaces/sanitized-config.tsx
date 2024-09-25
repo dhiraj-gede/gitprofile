@@ -134,6 +134,10 @@ export interface SanitizedThemeConfig {
   themes: Array<string>;
   customTheme: SanitizedCustomTheme;
 }
+export interface SanitizedProfileConfig {
+  defautProfile: string;
+  profiles: Array<string>;
+}
 
 export interface SanitizedConfig {
   github: SanitizedGithub;

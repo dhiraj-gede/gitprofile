@@ -353,7 +353,7 @@ interface ThemeConfig {
   customTheme?: CustomTheme;
 }
 
-interface Config {
+interface GitConfig {
   /**
    * GitHub config
    */
@@ -440,4 +440,4 @@ interface Config {
   enablePWA?: boolean;
 }
 
-declare const CONFIG: Config;
+declare const GIT_CONFIG: GitConfig;

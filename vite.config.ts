@@ -1,24 +1,25 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
-import CONFIG from './gitprofile.config';
+import GIT_CONFIG from './gitprofile.config';
 import { createHtmlPlugin } from 'vite-plugin-html';
+import { CONFIG } from './configLoader';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: CONFIG.base || '/',
+  base: CONFIG.base,
   plugins: [
     react(),
     createHtmlPlugin({
       inject: {
         data: {
-          metaTitle: CONFIG.seo.title,
-          metaDescription: CONFIG.seo.description,
-          metaImageURL: CONFIG.seo.imageURL,
+          metaTitle: GIT_CONFIG.seo.title,
+          metaDescription: GIT_CONFIG.seo.description,
+          metaImageURL: GIT_CONFIG.seo.imageURL,
         },
       },
     }),
-    ...(CONFIG.enablePWA
+    ...(GIT_CONFIG.enablePWA
       ? [
           VitePWA({
             registerType: 'autoUpdate',
@@ -43,6 +44,6 @@ export default defineConfig({
       : []),
   ],
   define: {
-    CONFIG: CONFIG,
+    GIT_CONFIG: GIT_CONFIG,
   },
 });
