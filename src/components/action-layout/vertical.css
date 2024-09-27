@@ -1,0 +1,18 @@
+.split,
+.gutter.gutter-horizontal { 
+  background-color: #6c5757;
+  cursor: col-resize !important;
+  position: relative;
+  color: #b1a5a5;
+
+}
+
+.gutter.gutter-horizontal::before {
+  content: '.\A.\A.';
+  position: absolute;
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Adjust for element's own size */
+  font-size: 40px;
+  line-height: 25%;
+}

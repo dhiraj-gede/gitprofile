@@ -20,7 +20,10 @@ const QuestionList: React.FC<QuestionListProps> = ({ questions, loading }) => {
     const array = [];
     for (let index = 0; index < questions.length; index++) {
       array.push(
-        <div className="p-4 bg-gray-800 rounded-lg shadow-md flex justify-between items-center animate-pulse">
+        <div
+          className="p-4 bg-gray-800 rounded-lg shadow-md flex justify-between items-center animate-pulse"
+          key={index}
+        >
           <div>
             <h2 className="text-xl font-bold bg-gray-700 w-48 h-6 rounded mb-2"></h2>
             <p className="bg-gray-700 w-64 h-4 rounded"></p>
@@ -36,9 +39,9 @@ const QuestionList: React.FC<QuestionListProps> = ({ questions, loading }) => {
     <div className="p-4 pt-0 mt-0 space-y-4">
       {loading
         ? renderSkeleton()
-        : questions.map((question, index) => (
+        : questions.map((question) => (
             <a
-              key={index}
+              key={question.slug}
               href={`https://www.hackerrank.com/challenges/${question.slug}/problem?isFullScreen=true`}
               target="_blank"
               rel="noopener noreferrer"

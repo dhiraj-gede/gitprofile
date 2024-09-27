@@ -1,6 +1,25 @@
+// src/components/gitprofile.tsx
 import { useCallback, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import axios, { AxiosError } from 'axios';
-import { formatDistance } from 'date-fns';
+import { HelmetProvider } from 'react-helmet-async';
+import '../assets/index.css';
+import { getInitialTheme, getSanitizedConfig, setupHotjar } from '../utils';
+import { SanitizedConfig } from '../interfaces/sanitized-config';
+import ErrorPage from './error-page';
+import HeadTagEditor from './head-tag-editor';
+import AvatarCard from './avatar-card';
+import DetailsCard from './details-card';
+import SkillCard from './skill-card';
+import ExperienceCard from './experience-card';
+import EducationCard from './education-card';
+import CertificationCard from './certification-card';
+import GithubProjectCard from './github-project-card';
+import ExternalProjectCard from './external-project-card';
+import BlogCard from './blog-card';
+import Footer from './footer';
+import { RootState } from '../store'; // Adjust this import based on your store setup
+import { GithubProject } from '../interfaces/github-project';
 import {
   CustomError,
   GENERIC_ERROR,
@@ -8,35 +27,12 @@ import {
   INVALID_GITHUB_USERNAME_ERROR,
   setTooManyRequestError,
 } from '../constants/errors';
-import { HelmetProvider } from 'react-helmet-async';
-import '../assets/index.css';
-import { getInitialTheme, getSanitizedConfig, setupHotjar } from '../utils';
-import { SanitizedConfig } from '../interfaces/sanitized-config';
-import ErrorPage from './error-page';
-import HeadTagEditor from './head-tag-editor';
 import { DEFAULT_THEMES } from '../constants/default-themes';
-// import ThemeChanger from './theme-changer';
+import { formatDistance } from 'date-fns';
 import { BG_COLOR } from '../constants';
-import AvatarCard from './avatar-card';
-import { Profile } from '../interfaces/profile';
-import DetailsCard from './details-card';
-import SkillCard from './skill-card';
-import ExperienceCard from './experience-card';
-import EducationCard from './education-card';
-import CertificationCard from './certification-card';
-import { GithubProject } from '../interfaces/github-project';
-import GithubProjectCard from './github-project-card';
-import ExternalProjectCard from './external-project-card';
-import BlogCard from './blog-card';
-import Footer from './footer';
 import PublicationCard from './publication-card';
+import { setProfile, setGithubProjects, setLoading } from '../store/userSlice';
 
-/**
- * Renders the GitProfile component.
- *
- * @param {Object} config - the configuration object
- * @return {JSX.Element} the rendered GitProfile component
- */
 const GitProfile = ({
   config,
   user,
@@ -44,14 +40,16 @@ const GitProfile = ({
   config: GitConfig;
   user: { id: number | null; name: string; email: string };
 }) => {
-  const [sanitizedConfig] = useState<SanitizedConfig | Record<string, never>>(
+  const dispatch = useDispatch();
+  const sanitizedConfig = useState<SanitizedConfig | Record<string, never>>(
     getSanitizedConfig(config),
-  );
+  )[0];
   const [theme, setTheme] = useState<string>(DEFAULT_THEMES[0]);
+  const { profile, githubProjects, loading } = useSelector(
+    (state: RootState) => state.user,
+  );
+
   const [error, setError] = useState<CustomError | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [profile, setProfile] = useState<Profile | null>(null);
-  const [githubProjects, setGithubProjects] = useState<GithubProject[]>([]);
 
   const getGithubProjects = useCallback(
     async (publicRepoCount: number): Promise<GithubProject[]> => {
@@ -102,10 +100,14 @@ const GitProfile = ({
       sanitizedConfig.projects.github.automatic.exclude.projects,
     ],
   );
+  // useEffect(() => {
+  //   console.log('sending dispatch for loading: ');
+  //   dispatch(setLoading(true));
+  // }, []);
 
   const loadData = useCallback(async () => {
+    dispatch(setLoading(true));
     try {
-      setLoading(true);
       const requestObject = {
         headers: {
           'Content-Type': 'application/json',
@@ -117,30 +119,33 @@ const GitProfile = ({
         requestObject,
       );
       const data = response.data;
-
-      setProfile({
+      console.log('pro', {
         avatar: data.avatar_url,
         name: data.name || ' ',
         bio: data.bio || '',
         location: data.location || '',
         company: data.company || '',
       });
+      dispatch(
+        setProfile({
+          avatar: data.avatar_url,
+          name: data.name || ' ',
+          bio: data.bio || '',
+          location: data.location || '',
+          company: data.company || '',
+        }),
+      );
 
-      if (!sanitizedConfig.projects.github.display) {
-        return;
+      if (sanitizedConfig.projects.github.display) {
+        const projects = await getGithubProjects(data.public_repos);
+        dispatch(setGithubProjects(projects));
       }
-
-      setGithubProjects(await getGithubProjects(data.public_repos));
-    } catch (error) {
-      handleError(error as AxiosError | Error);
+    } catch (error: AxiosError | unknown) {
+      handleError(error);
     } finally {
-      setLoading(false);
+      dispatch(setLoading(false));
     }
-  }, [
-    sanitizedConfig.github.username,
-    sanitizedConfig.projects.github.display,
-    getGithubProjects,
-  ]);
+  }, [dispatch, sanitizedConfig.projects.github.display, getGithubProjects]);
 
   useEffect(() => {
     if (Object.keys(sanitizedConfig).length === 0) {
@@ -157,9 +162,7 @@ const GitProfile = ({
     theme && document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
 
-  const handleError = (error: AxiosError | Error): void => {
-    console.error('Error:', error);
-
+  const handleError = (error: AxiosError | Error | unknown): void => {
     if (error instanceof AxiosError) {
       try {
         const reset = formatDistance(
@@ -210,14 +213,6 @@ const GitProfile = ({
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 rounded-box">
                 <div className="col-span-1">
                   <div className="grid grid-cols-1 gap-6">
-                    {/* {!sanitizedConfig.themeConfig.disableSwitch && (
-                      <ThemeChanger
-                        theme={theme}
-                        setTheme={setTheme}
-                        loading={loading}
-                        themeConfig={sanitizedConfig.themeConfig}
-                      />
-                    )} */}
                     <AvatarCard
                       profile={profile}
                       loading={loading}

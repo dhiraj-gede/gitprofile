@@ -1,0 +1,17 @@
+.split,
+.gutter.gutter-vertical { 
+  background-color: #6c5757;
+  cursor: row-resize !important;
+  position: relative;
+  color: #b1a5a5;
+}
+
+.gutter.gutter-vertical::before {
+  content: '...';
+  position: absolute;
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -70%); /* Adjust for element's own size */
+  font-size: 40px;
+  /* line-height: 25%; */
+}

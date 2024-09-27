@@ -1,12 +1,17 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import { AiOutlineLogin } from 'react-icons/ai';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { DecodedToken } from '../../../main';
+import { jwtDecode } from 'jwt-decode';
+import { login } from '../../../store/userSlice';
 
 export default function LoginCard() {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [error, setError] = useState<string>('');
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -14,16 +19,12 @@ export default function LoginCard() {
     try {
       const response = await axios.post(
         'http://localhost:5000/api/users/auth/login',
-        {
-          email,
-          password,
-        },
+        { email, password },
       );
 
-      // Save token in session storage
-      sessionStorage.setItem('token', response.data.token);
+      const decoded: DecodedToken = jwtDecode(response.data.token);
+      dispatch(login(decoded));
 
-      // Navigate to GitHub profile or any protected route
       navigate('/githubprofile'); // Adjust this route as needed
     } catch (err) {
       setError('Invalid login credentials');
