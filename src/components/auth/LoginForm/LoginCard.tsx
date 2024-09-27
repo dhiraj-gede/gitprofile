@@ -2,9 +2,7 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import { AiOutlineLogin } from 'react-icons/ai';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { DecodedToken } from '../../../main';
-import { jwtDecode } from 'jwt-decode';
+import { Link, useNavigate } from 'react-router-dom';
 import { login } from '../../../store/userSlice';
 
 export default function LoginCard() {
@@ -22,10 +20,10 @@ export default function LoginCard() {
         { email, password },
       );
 
-      const decoded: DecodedToken = jwtDecode(response.data.token);
-      dispatch(login(decoded));
+      sessionStorage.setItem('token', response.data.token);
+      dispatch(login(response.data.token));
 
-      navigate('/githubprofile'); // Adjust this route as needed
+      navigate('/code'); // Adjust this route as needed
     } catch (err) {
       setError('Invalid login credentials');
     }
@@ -75,12 +73,12 @@ export default function LoginCard() {
       </form>
       <p className="mt-4 text-center text-base-content text-opacity-70">
         Don’t have an account?{' '}
-        <a
-          href="/signup"
+        <Link
+          to="/signup"
           className="text-blue-500 hover:underline transition-all"
         >
           Sign Up
-        </a>
+        </Link>
       </p>
     </div>
   );

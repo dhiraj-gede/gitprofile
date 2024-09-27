@@ -48,7 +48,7 @@ export const App = () => {
           dispatch(logout());
         } else {
           // Token is valid, update the state with user info
-          dispatch(login(decoded));
+          dispatch(login(token));
         }
       } catch (error) {
         console.error('Error decoding token:', error);

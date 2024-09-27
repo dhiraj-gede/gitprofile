@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { FALLBACK_IMAGE } from '../../constants';
 import { Profile } from '../../interfaces/profile';
 import { skeleton } from '../../utils';
@@ -82,15 +83,15 @@ const AvatarCard: React.FC<AvatarCardProps> = ({
               {skeleton({ widthCls: 'w-40', heightCls: 'h-8' })}
             </div>
           ) : (
-            <a
-              href={resumeFileUrl}
+            <Link
+              to={resumeFileUrl}
               target="_blank"
               className="btn btn-outline btn-sm text-xs mt-6 opacity-50"
               download
               rel="noreferrer"
             >
               Download Resume
-            </a>
+            </Link>
           ))}
       </div>
     </div>

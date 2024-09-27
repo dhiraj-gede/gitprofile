@@ -6,6 +6,7 @@ import { formatDistance } from 'date-fns';
 import { SanitizedBlog } from '../../interfaces/sanitized-config';
 import { ga, skeleton } from '../../utils';
 import { Article } from '../../interfaces/article';
+import { Link } from 'react-router-dom';
 
 const BlogCard = ({
   loading,
@@ -94,10 +95,10 @@ const BlogCard = ({
   const renderArticles = () => {
     return articles && articles.length ? (
       articles.slice(0, blog.limit).map((article, index) => (
-        <a
+        <Link
           className="card shadow-lg compact bg-base-100 cursor-pointer"
           key={index}
-          href={article.link}
+          to={article.link}
           onClick={(e) => {
             e.preventDefault();
 
@@ -158,7 +159,7 @@ const BlogCard = ({
               </div>
             </div>
           </div>
-        </a>
+        </Link>
       ))
     ) : (
       <div className="text-center mb-6">

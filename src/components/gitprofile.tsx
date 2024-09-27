@@ -35,7 +35,6 @@ import { setProfile, setGithubProjects, setLoading } from '../store/userSlice';
 
 const GitProfile = ({
   config,
-  user,
 }: {
   config: GitConfig;
   user: { id: number | null; name: string; email: string };
@@ -291,7 +290,6 @@ const GitProfile = ({
                 </div>
               </div>
             </div>
-            {`${user.name}`}
             {sanitizedConfig.footer && (
               <footer
                 className={`p-4 footer ${BG_COLOR} text-base-content footer-center`}

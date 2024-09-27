@@ -1,6 +1,7 @@
 import React from 'react';
 import { SanitizedCertification } from '../../interfaces/sanitized-config';
 import { skeleton } from '../../utils';
+import { Link } from 'react-router-dom';
 
 const ListItem = ({
   year,
@@ -20,9 +21,9 @@ const ListItem = ({
     ></div>
     <div className="my-0.5 text-xs">{year}</div>
     <div className="font-medium">
-      <a href={link} target="_blank" rel="noreferrer">
+      <Link to={link || ''} target="_blank" rel="noreferrer">
         {name}
-      </a>
+      </Link>
     </div>
     <h3 className="mb-4 font-normal">{body}</h3>
   </li>

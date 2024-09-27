@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 interface SignupFormProps {}
 
@@ -86,9 +86,9 @@ const SignupForm: React.FC<SignupFormProps> = () => {
         </form>
         <p className="mt-4 text-center text-sm text-base-content opacity-70">
           Already have an account?{' '}
-          <a href="/login" className="text-blue-500 hover:underline">
+          <Link to="/login" className="text-blue-500 hover:underline">
             Log In
-          </a>
+          </Link>
         </p>
       </div>
     </div>

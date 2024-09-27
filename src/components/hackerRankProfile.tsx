@@ -1,7 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import axios, { AxiosError } from 'axios';
 import { HelmetProvider } from 'react-helmet-async';
-import '../assets/index.css';
 import {
   CustomError,
   GENERIC_ERROR,

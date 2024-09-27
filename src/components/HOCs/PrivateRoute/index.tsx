@@ -13,9 +13,8 @@ const PrivateRoute: React.FC = () => {
   const [delayComplete, setDelayComplete] = useState<boolean>(false);
 
   useEffect(() => {
-    console.log('isLoggedIn', isLoggedIn);
-
     if (!isLoggedIn || (decodedToken?.exp && decodedToken.exp <= currentTime)) {
+      console.log('isLoggedIn', isLoggedIn);
       // If user is not logged in or token is expired, delay the redirection
       setTimeout(() => {
         setDelayComplete(true);

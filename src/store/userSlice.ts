@@ -3,6 +3,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { DecodedToken } from '../main';
 import { GithubProject } from '../interfaces/github-project';
 import { Profile } from '../interfaces/profile';
+import { jwtDecode } from 'jwt-decode';
 
 interface UserState {
   profile: Profile | null;
@@ -37,15 +38,15 @@ const userSlice = createSlice({
       console.log('Loading', action);
       state.loading = action.payload;
     },
-    login: (state, action: PayloadAction<DecodedToken>) => {
+    login: (state, action: PayloadAction<string>) => {
       console.log('login', action);
       state.isLoggedIn = true;
-      state.decodedToken = action.payload;
+      state.decodedToken = jwtDecode(action.payload);
 
       // Store token in sessionStorage
       const token = sessionStorage.getItem('token');
       if (!token) {
-        const encodedToken = JSON.stringify(action.payload); // Assuming you pass the token in decoded form
+        const encodedToken = action.payload;
         sessionStorage.setItem('token', encodedToken);
       }
     },
