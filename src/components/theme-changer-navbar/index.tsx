@@ -69,7 +69,7 @@ const ThemeChanger = ({
                   {loading
                     ? skeleton({ widthCls: 'w-16', heightCls: 'h-5' })
                     : theme === themeConfig.defaultTheme
-                      ? 'Default'
+                      ? 'dark'
                       : theme}
                 </span>
               </span>
@@ -99,7 +99,7 @@ const ThemeChanger = ({
                       className={`${theme === item ? 'active' : ''}`}
                     >
                       <span className="opacity-60 capitalize">
-                        {item === themeConfig.defaultTheme ? 'Default' : item}
+                        {item === themeConfig.defaultTheme ? 'dark' : item}
                       </span>
                     </a>
                   </li>
