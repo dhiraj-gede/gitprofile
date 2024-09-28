@@ -10,6 +10,7 @@ import { SOCIAL_CONFIG } from './config/socialConfig';
 
 const CONFIG = {
   notFound: NOT_FOUND_CONFIG,
+  base: '/gitprofile',
   github: GIT_CONFIG.github,
   projects: PROJECT_CONFIG,
   seo: SEO_CONFIG,

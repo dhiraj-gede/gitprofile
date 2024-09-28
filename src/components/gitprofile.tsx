@@ -4,10 +4,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios, { AxiosError } from 'axios';
 import { HelmetProvider } from 'react-helmet-async';
 import '../assets/index.css';
-import { getInitialTheme, getSanitizedConfig, setupHotjar } from '../utils';
+import { getSanitizedGitConfig, setupHotjar } from '../utils';
 import { SanitizedConfig } from '../interfaces/sanitized-config';
 import ErrorPage from './error-page';
-import HeadTagEditor from './head-tag-editor';
+// import HeadTagEditor from './head-tag-editor';
 import AvatarCard from './avatar-card';
 import DetailsCard from './details-card';
 import SkillCard from './skill-card';
@@ -27,7 +27,6 @@ import {
   INVALID_GITHUB_USERNAME_ERROR,
   setTooManyRequestError,
 } from '../constants/errors';
-import { DEFAULT_THEMES } from '../constants/default-themes';
 import { formatDistance } from 'date-fns';
 import { BG_COLOR } from '../constants';
 import PublicationCard from './publication-card';
@@ -41,9 +40,8 @@ const GitProfile = ({
 }) => {
   const dispatch = useDispatch();
   const sanitizedConfig = useState<SanitizedConfig | Record<string, never>>(
-    getSanitizedConfig(config),
+    getSanitizedGitConfig(config),
   )[0];
-  const [theme, setTheme] = useState<string>(DEFAULT_THEMES[0]);
   const { profile, githubProjects, loading } = useSelector(
     (state: RootState) => state.user,
   );
@@ -151,15 +149,10 @@ const GitProfile = ({
       setError(INVALID_CONFIG_ERROR);
     } else {
       setError(null);
-      setTheme(getInitialTheme(sanitizedConfig.themeConfig));
       setupHotjar(sanitizedConfig.hotjar);
       loadData();
     }
   }, [sanitizedConfig, loadData]);
-
-  useEffect(() => {
-    theme && document.documentElement.setAttribute('data-theme', theme);
-  }, [theme]);
 
   const handleError = (error: AxiosError | Error | unknown): void => {
     if (error instanceof AxiosError) {
@@ -204,10 +197,10 @@ const GitProfile = ({
           />
         ) : (
           <>
-            <HeadTagEditor
+            {/* <HeadTagEditor
               googleAnalyticsId={sanitizedConfig.googleAnalytics.id}
               appliedTheme={theme}
-            />
+            /> */}
             <div className={`p-4 lg:p-10 min-h-full ${BG_COLOR}`}>
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 rounded-box">
                 <div className="col-span-1">

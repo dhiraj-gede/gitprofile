@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom';
 import { FALLBACK_IMAGE } from '../../constants';
 import { Profile } from '../../interfaces/profile';
-import { skeleton } from '../../utils';
 import LazyImage from '../lazy-image';
+import { skeleton } from '../../utils';
 
 interface AvatarCardProps {
   profile: Profile | null;

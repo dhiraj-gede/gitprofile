@@ -12,7 +12,7 @@ import ActionLayout from './components/action-layout/index.tsx';
 import NotFoundPage from './components/NotFound.tsx';
 import PrivateRoute from './components/HOCs/PrivateRoute/index.tsx';
 import { SanitizedConfig } from './interfaces/sanitized-config.tsx';
-import { getSanitizedConfig } from './utils/index.tsx';
+import { getSanitizedGitConfig } from './utils/github.tsx';
 import { Provider, useDispatch, useSelector } from 'react-redux';
 import store, { RootState } from './store/index.ts';
 import { login, logout } from './store/userSlice.ts';
@@ -30,7 +30,7 @@ export const App = () => {
     (state: RootState) => state.user,
   );
   const [sanitizedConfig] = useState<SanitizedConfig | Record<string, never>>(
-    getSanitizedConfig(GIT_CONFIG),
+    getSanitizedGitConfig(GIT_CONFIG),
   );
 
   const navigate = useNavigate();

@@ -13,11 +13,12 @@ import AvatarCard from './avatar-card'; // Reuse AvatarCard for displaying avata
 import DetailsCard from './details-card'; // Reuse DetailsCard for other info
 import Footer from './footer';
 import { BG_COLOR } from '../constants';
-import { DEFAULT_THEMES } from '../constants/default-themes';
-import { getInitialTheme, getSanitizedConfig, setupHotjar } from '../utils';
+// import { DEFAULT_THEMES } from '../constants/default-themes';
+import { getSanitizedGitConfig } from '../utils/github';
 import { SanitizedConfig } from '../interfaces/sanitized-config';
 import AboutSection from './about-card';
 import QuestionComponent from './question-list';
+import { setupHotjar } from '../utils/hotjar';
 
 interface HackerRankProfileData {
   username: string;
@@ -41,9 +42,9 @@ const HackerRankProfile = ({
   const [profile, setProfile] = useState<HackerRankProfileData | null>(null);
   const [error, setError] = useState<CustomError | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const [theme, setTheme] = useState<string>(DEFAULT_THEMES[0]);
+  // const [theme, setTheme] = useState<string>(DEFAULT_THEMES[0]);
   const [sanitizedConfig] = useState<SanitizedConfig | Record<string, never>>(
-    getSanitizedConfig(config),
+    getSanitizedGitConfig(config),
   );
 
   const loadProfile = useCallback(async () => {
@@ -87,7 +88,7 @@ const HackerRankProfile = ({
       setError(INVALID_CONFIG_ERROR);
     } else {
       setError(null);
-      setTheme(getInitialTheme(sanitizedConfig.themeConfig));
+      // setTheme(getInitialTheme(sanitizedConfig.themeConfig));
       setupHotjar(sanitizedConfig.hotjar);
       loadProfile();
     }
@@ -105,9 +106,9 @@ const HackerRankProfile = ({
       setError(GENERIC_ERROR);
     }
   };
-  useEffect(() => {
-    theme && document.documentElement.setAttribute('data-theme', theme);
-  }, [theme]);
+  // useEffect(() => {
+  //   theme && document.documentElement.setAttribute('data-theme', theme);
+  // }, [theme]);
 
   return (
     <HelmetProvider>
