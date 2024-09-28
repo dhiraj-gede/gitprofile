@@ -11,11 +11,12 @@ import LandingPage from './components/landing-page/index.tsx';
 import ActionLayout from './components/action-layout/index.tsx';
 import NotFoundPage from './components/NotFound.tsx';
 import PrivateRoute from './components/HOCs/PrivateRoute/index.tsx';
-import { SanitizedConfig } from './interfaces/sanitized-config.tsx';
-import { getSanitizedGitConfig } from './utils/github.tsx';
+import { SanitizedThemeConfig } from './interfaces/sanitized-config.tsx';
 import { Provider, useDispatch, useSelector } from 'react-redux';
 import store, { RootState } from './store/index.ts';
 import { login, logout } from './store/userSlice.ts';
+import { getSanitizedThemeConfig } from './utils/theme.tsx';
+import { THEME_CONFIG } from '../config/themeConfig.ts';
 
 export interface DecodedToken {
   email: string;
@@ -29,8 +30,9 @@ export const App = () => {
   const { isLoggedIn, decodedToken } = useSelector(
     (state: RootState) => state.user,
   );
-  const [sanitizedConfig] = useState<SanitizedConfig | Record<string, never>>(
-    getSanitizedGitConfig(GIT_CONFIG),
+
+  const [themeConfig] = useState<SanitizedThemeConfig>(
+    getSanitizedThemeConfig(THEME_CONFIG),
   );
 
   const navigate = useNavigate();
@@ -74,7 +76,7 @@ export const App = () => {
           { name: 'Login', href: 'login', display: !isLoggedIn },
           { name: 'Signup', href: 'signup', display: !isLoggedIn },
         ]}
-        themeConfig={sanitizedConfig.themeConfig}
+        themeConfig={themeConfig}
         loading={false}
         onLogout={handleLogout}
       />

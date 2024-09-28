@@ -1,4 +1,4 @@
-import GIT_CONFIG from './gitprofile.config';
+import { GIT_CONFIG } from './config/gitConfig';
 
 const getConfig = () => {
   // Check if `window` is available (i.e., we're in a browser environment)
