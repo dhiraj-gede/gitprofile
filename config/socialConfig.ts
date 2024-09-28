@@ -1,0 +1,16 @@
+export const SOCIAL_CONFIG = {
+  linkedin: 'dhiraj-gede',
+  researchGate: '',
+  facebook: '',
+  instagram: '',
+  reddit: '',
+  threads: '',
+  youtube: '',
+  udemy: '',
+  dribbble: '',
+  behance: '',
+  stackoverflow: '',
+  skype: '',
+  telegram: '',
+  phone: '',
+};
