@@ -8,7 +8,7 @@ import { INTEGRATION_CONFIG } from './config/integrationConfig';
 import { FOOTER_CONFIG } from './config/footerConfig';
 import { SOCIAL_CONFIG } from './config/socialConfig';
 
-const CONFIG = {
+const GitCONFIG = {
   notFound: NOT_FOUND_CONFIG,
   ...GIT_CONFIG,
   projects: PROJECT_CONFIG,
@@ -21,4 +21,4 @@ const CONFIG = {
   enablePWA: true,
 };
 
-export default CONFIG;
+export default GitCONFIG;

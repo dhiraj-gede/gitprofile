@@ -1,21 +1,83 @@
-import { Dispatch, SetStateAction } from 'react';
+import { useEffect } from 'react';
 import Split from 'react-split';
 import MonacoEditor from 'react-monaco-editor';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../store'; // Import RootState for typing
+import {
+  setCode,
+  setCurrentCode,
+  setLanguage,
+} from '../../store/questionSlice'; // Import setCode action
 import './horizontal.css';
 import './index.css';
+import TestCaseTabs from './TestcaseTabs';
 
-export const CodeEditor = ({
-  language,
-  code,
-  setCode,
-}: {
-  language: string;
-  code: string;
-  setCode: Dispatch<SetStateAction<string>>;
-}) => {
+interface CodeEditorProps {
+  // language: string;
+  view: boolean;
+  problemId: string;
+}
+interface currentCode {
+  template: string;
+  templateHead: string;
+  templateTail: string;
+}
+
+export const CodeEditor = ({ view, problemId }: CodeEditorProps) => {
+  const dispatch = useDispatch();
+
+  // Select code state from Redux
+  const code = useSelector((state: RootState) => state.question.code);
+  const question = useSelector((state: RootState) => state.question);
+  const language = useSelector((state: RootState) => state.question.language);
+  const currentCode = useSelector(
+    (state: RootState) => state.question.currentCode,
+  );
+
   const editorOptions = {
     selectOnLineNumbers: true,
     automaticLayout: true,
+    readOnly: view,
+  };
+
+  // const [currentCode, setCurrentCode] = useState<currentCode>({
+  //   template: '',
+  //   templateHead: '',
+  //   templateTail: '',
+  // });
+
+  useEffect(() => {
+    console.log('view', view, code);
+    if (view) {
+      dispatch(setCurrentCode({ ...code, template: currentCode.template }));
+    } else {
+      dispatch(
+        setCurrentCode({
+          template: code.template,
+          templateHead: '',
+          templateTail: '',
+        }),
+      );
+    }
+  }, [view, language, code, currentCode.template, dispatch]);
+
+  useEffect(() => {
+    dispatch(setLanguage('cpp14'));
+  }, [dispatch]);
+
+  const handleCodeChange = (newCode: string) => {
+    console.log('code', question);
+    dispatch(
+      setCode({
+        templateHead: code.templateHead,
+        template: newCode,
+        templateTail: code.templateTail,
+      }),
+    );
+  };
+  const getCode = (codeObj: currentCode): string => {
+    console.log('currentCode', currentCode);
+    return codeObj.templateHead + codeObj.template + codeObj.templateTail;
   };
 
   return (
@@ -34,20 +96,14 @@ export const CodeEditor = ({
             height="100%" // Ensure height fills the available space
             language={language.toLowerCase()}
             theme="vs-dark"
-            value={code}
+            value={getCode(currentCode)}
             options={editorOptions}
-            onChange={(newCode) => setCode(newCode)}
+            onChange={handleCodeChange} // Use the new handleCodeChange function
           />
         </div>
 
         {/* Test Case Section */}
-        <div className="flex flex-col p-4 flex-grow">
-          <label className="block text-sm font-semibold mb-2">Test Case</label>
-          <input
-            className="border border-gray-300 rounded px-4 py-2 w-full"
-            placeholder="Enter test case input"
-          />
-        </div>
+        <TestCaseTabs problemId={problemId} />
       </Split>
     </div>
   );

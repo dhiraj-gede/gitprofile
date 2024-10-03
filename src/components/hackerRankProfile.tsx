@@ -9,29 +9,16 @@ import {
 } from '../constants/errors';
 import ErrorPage from './error-page';
 import HeadTagEditor from './head-tag-editor';
-import AvatarCard from './avatar-card'; // Reuse AvatarCard for displaying avatar
-import DetailsCard from './details-card'; // Reuse DetailsCard for other info
+import AvatarCard from './avatar-card';
+import DetailsCard from './details-card';
 import Footer from './footer';
 import { BG_COLOR } from '../constants';
-// import { DEFAULT_THEMES } from '../constants/default-themes';
-import { getSanitizedGitConfig } from '../utils/github';
-import { SanitizedConfig } from '../interfaces/sanitized-config';
+import { sanitizedHackerrankConfig } from '../interfaces/sanitized-config';
 import AboutSection from './about-card';
 import QuestionComponent from './question-list';
 import { setupHotjar } from '../utils/hotjar';
-
-interface HackerRankProfileData {
-  username: string;
-  country: string;
-  school: string;
-  avatar: string;
-  short_bio: string;
-  name: string;
-  jobs_headline: string;
-  linkedin_url: string;
-  github_url: string;
-  followers_count: number;
-}
+import { HackerRankProfileData } from '../interfaces/hackerrank';
+import { getSanitizedHackerrankConfig } from '../utils/hackerrank';
 
 const HackerRankProfile = ({
   config,
@@ -43,9 +30,9 @@ const HackerRankProfile = ({
   const [error, setError] = useState<CustomError | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   // const [theme, setTheme] = useState<string>(DEFAULT_THEMES[0]);
-  const [sanitizedConfig] = useState<SanitizedConfig | Record<string, never>>(
-    getSanitizedGitConfig(config),
-  );
+  const [SanitizedGitConfig] = useState<
+    sanitizedHackerrankConfig | Record<string, never>
+  >(getSanitizedHackerrankConfig(config));
 
   const loadProfile = useCallback(async () => {
     try {
@@ -84,15 +71,14 @@ const HackerRankProfile = ({
     loadProfile();
   }, [loadProfile]);
   useEffect(() => {
-    if (Object.keys(sanitizedConfig).length === 0) {
+    if (Object.keys(SanitizedGitConfig).length === 0) {
       setError(INVALID_CONFIG_ERROR);
     } else {
       setError(null);
-      // setTheme(getInitialTheme(sanitizedConfig.themeConfig));
-      setupHotjar(sanitizedConfig.hotjar);
+      setupHotjar(SanitizedGitConfig.hotjar);
       loadProfile();
     }
-  }, [sanitizedConfig, loadProfile]);
+  }, [SanitizedGitConfig, loadProfile]);
 
   const handleError = (error: AxiosError | Error): void => {
     console.error('Error:', error);

@@ -440,4 +440,92 @@ interface GitConfig {
   enablePWA?: boolean;
 }
 
+interface HackerrankConfig {
+  /**
+   * GitHub config
+   */
+  github: Github;
+
+  /**
+   * Vite's base url
+   */
+  base?: string;
+
+  /**
+   * Projects config
+   */
+  projects?: Projects;
+
+  /**
+   * SEO config
+   */
+  seo?: SEO;
+
+  /**
+   * Social links
+   */
+  social?: Social;
+
+  /**
+   * Skill list
+   */
+  skills?: Array<string>;
+
+  /**
+   * Experience list
+   */
+  experiences?: Array<Experience>;
+
+  /**
+   * Certifications list
+   */
+  certifications?: Array<Certification>;
+
+  /**
+   * Education list
+   */
+  educations?: Array<Education>;
+
+  /**
+   * Publication list
+   */
+  publications?: Array<Publication>;
+
+  /**
+   * Resume
+   */
+  resume?: Resume;
+
+  /**
+   * Google Analytics config
+   */
+  googleAnalytics?: GoogleAnalytics;
+
+  /**
+   * Hotjar config
+   */
+  hotjar?: Hotjar;
+
+  /**
+   * Blog config
+   */
+  blog?: Blog;
+
+  /**
+   * Theme config
+   */
+  themeConfig?: ThemeConfig;
+
+  /**
+   * Custom footer
+   */
+  footer?: string;
+
+  /**
+   * Enable PWA
+   */
+  enablePWA?: boolean;
+}
+
+declare const HACKERRANK_CONFIG: HackerrankConfig;
 declare const GIT_CONFIG: GitConfig;

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 interface Question {
   name: string;
@@ -40,10 +41,11 @@ const QuestionList: React.FC<QuestionListProps> = ({ questions, loading }) => {
       {loading
         ? renderSkeleton()
         : questions.map((question) => (
-            <a
+            <Link
               key={question.slug}
-              href={`https://www.hackerrank.com/challenges/${question.slug}/problem?isFullScreen=true`}
-              target="_blank"
+              // href={`https://www.hackerrank.com/challenges/${question.slug}/problem?isFullScreen=true`}
+              to={`/code?slug=${question.slug}`}
+              // target="_blank"
               rel="noopener noreferrer"
               className="block"
             >
@@ -82,7 +84,7 @@ const QuestionList: React.FC<QuestionListProps> = ({ questions, loading }) => {
                   </button>
                 </div>
               </div>
-            </a>
+            </Link>
           ))}
     </div>
   );

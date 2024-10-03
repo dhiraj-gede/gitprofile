@@ -1,39 +1,12 @@
 import { DEFAULT_CUSTOM_THEME } from '../constants/default-custom-theme';
 import { DEFAULT_THEMES } from '../constants/default-themes';
-import { SanitizedGitConfig } from '../interfaces/sanitized-config';
+import { sanitizedHackerrankConfig } from '../interfaces/sanitized-config';
 
-export const getSanitizedGitConfig = (
-  config: GitConfig,
-): SanitizedGitConfig | Record<string, never> => {
+export const getSanitizedHackerrankConfig = (
+  config: HackerrankConfig,
+): sanitizedHackerrankConfig | Record<string, never> => {
   try {
     return {
-      github: {
-        username: config.github.username,
-      },
-      projects: {
-        github: {
-          display: config?.projects?.github?.display ?? true,
-          header: config?.projects?.github?.header || 'Github Projects',
-          mode: config?.projects?.github?.mode || 'automatic',
-          automatic: {
-            sortBy: config?.projects?.github?.automatic?.sortBy || 'stars',
-            limit: config?.projects?.github?.automatic?.limit || 8,
-            exclude: {
-              forks:
-                config?.projects?.github?.automatic?.exclude?.forks || false,
-              projects:
-                config?.projects?.github?.automatic?.exclude?.projects || [],
-            },
-          },
-          manual: {
-            projects: config?.projects?.github?.manual?.projects || [],
-          },
-        },
-        external: {
-          header: config?.projects?.external?.header || 'My Projects',
-          projects: config?.projects?.external?.projects || [],
-        },
-      },
       seo: {
         title: config?.seo?.title,
         description: config?.seo?.description,

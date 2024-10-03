@@ -139,9 +139,26 @@ export interface SanitizedProfileConfig {
   profiles: Array<string>;
 }
 
-export interface SanitizedConfig {
+export interface SanitizedGitConfig {
   github: SanitizedGithub;
   projects: SanitizedProjects;
+  seo: SanitizedSEO;
+  social: SanitizedSocial;
+  resume: SanitizedResume;
+  skills: Array<string>;
+  experiences: Array<SanitizedExperience>;
+  educations: Array<SanitizedEducation>;
+  certifications: Array<SanitizedCertification>;
+  publications: Array<SanitizedPublication>;
+  googleAnalytics: SanitizedGoogleAnalytics;
+  hotjar: SanitizedHotjar;
+  blog: SanitizedBlog;
+  themeConfig: SanitizedThemeConfig;
+  footer?: string;
+  enablePWA: boolean;
+}
+
+export interface sanitizedHackerrankConfig {
   seo: SanitizedSEO;
   social: SanitizedSocial;
   resume: SanitizedResume;

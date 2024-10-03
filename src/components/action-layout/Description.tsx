@@ -1,12 +1,21 @@
-export const Description = () => (
-  <div className="bg-gray-50 p-4 h-full overflow-auto">
-    <div className="border-b border-gray-300 mb-4">
-      <button className="px-4 py-2 text-sm font-semibold border-b-2 border-blue-600">
-        Description
-      </button>
-      {/* Add other buttons for Editorial, Solutions, etc. */}
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store'; // Import RootState for typing
+
+export const Description: React.FC = () => {
+  // Access the question from the Redux store with proper typing
+  const question = useSelector((state: RootState) => state.question.question);
+
+  if (!question) {
+    return <div>Loading...</div>; // Show a loading message if the question is null or undefined
+  }
+
+  return (
+    <div className="card shadow-lg compact bg-base-100">
+      <div className="card-body">
+        <div className="text-base-content text-opacity-60">
+          <div dangerouslySetInnerHTML={{ __html: question.body_html }}></div>
+        </div>
+      </div>
     </div>
-    <h2 className="text-xl font-bold">29. Divide Two Integers</h2>
-    <p className="mt-2 text-gray-700">Question description goes here...</p>
-  </div>
-);
+  );
+};

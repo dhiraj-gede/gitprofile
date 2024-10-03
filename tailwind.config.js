@@ -1,4 +1,4 @@
-import CONFIG from './gitprofile.config';
+import { THEME_CONFIG } from './config/themeConfig';
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -9,9 +9,6 @@ export default {
   plugins: [require('daisyui')],
   daisyui: {
     logs: false,
-    themes: [
-      ...CONFIG.themeConfig.themes,
-      { procyon: CONFIG.themeConfig.customTheme },
-    ],
+    themes: [...THEME_CONFIG.themes, { procyon: THEME_CONFIG.customTheme }],
   },
 };

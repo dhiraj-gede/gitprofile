@@ -4,6 +4,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 import GIT_CONFIG from './gitprofile.config';
 import { createHtmlPlugin } from 'vite-plugin-html';
 import { CONFIG } from './configLoader';
+import { HACKERRANK_CONFIG } from './config/hackerrankConfig';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -45,5 +46,6 @@ export default defineConfig({
   ],
   define: {
     GIT_CONFIG: GIT_CONFIG,
+    HACKERRANK_CONFIG: HACKERRANK_CONFIG,
   },
 });

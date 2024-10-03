@@ -96,7 +96,10 @@ export const App = () => {
           <Route
             path="/hackerrank"
             element={
-              <HackerRankProfile username="dhirajgede" config={GIT_CONFIG} />
+              <HackerRankProfile
+                username="dhirajgede"
+                config={HACKERRANK_CONFIG}
+              />
             }
           />
           <Route path="/code" element={<ActionLayout />} />

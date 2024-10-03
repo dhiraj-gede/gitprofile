@@ -6,5 +6,5 @@
     "moduleResolution": "bundler",
     "allowSyntheticDefaultImports": true
   },
-  "include": ["gitprofile.config.ts", "vite.config.ts", "configLoader.ts","config/notFoundConfig.ts", "config/gitConfig.ts", "config/projectConfig.ts", "config/seoConfig.ts", "config/socialConfig.ts", "config/skillConfig.ts", "config/themeConfig.ts", "config/integrationConfig.ts", "config/footerConfig.ts",]
+  "include": ["gitprofile.config.ts", "home.config.ts", "hackerrank.config.ts", "vite.config.ts", "configLoader.ts","config/notFoundConfig.ts", "config/gitConfig.ts", "config/projectConfig.ts", "config/seoConfig.ts", "config/socialConfig.ts", "config/skillConfig.ts", "config/themeConfig.ts", "config/integrationConfig.ts", "config/footerConfig.ts", "config/hackerrankConfig.ts", "src/components/action-layout/wa/libraryFine.js"]
 }
