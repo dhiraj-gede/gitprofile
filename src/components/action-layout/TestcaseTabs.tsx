@@ -1,7 +1,8 @@
 import { useState, useEffect, MouseEvent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchTestCases, submitBulkTestCases } from '../../store/questionSlice';
+// import { fetchTestCases, submitBulkTestCases } from '../../store/questionSlice';
 import { AppDispatch, RootState } from '../../store'; // Adjust this path accordingly
+import { fetchTestCases, submitBulkTestCases } from '../../store/testCaseSlice';
 
 interface TestCase {
   input: string;
@@ -11,7 +12,7 @@ interface TestCase {
 const TestCaseTabs = ({ problemId }: { problemId: string }) => {
   const dispatch: AppDispatch = useDispatch();
   const { testCases, loading } = useSelector(
-    (state: RootState) => state.question,
+    (state: RootState) => state.testCases,
   );
 
   const [activeTab, setActiveTab] = useState(1); // 1: Show, 2: Bulk Add/Edit
@@ -100,7 +101,10 @@ const TestCaseTabs = ({ problemId }: { problemId: string }) => {
                   <li key={index}>
                     <div>Input: {testCase.input}</div>
                     <div>
-                      Expected Output: {testCase.expected_output.join(', ')}
+                      Expected Output:{' '}
+                      {Array.isArray(testCase.expected_output)
+                        ? testCase.expected_output.join(', ')
+                        : testCase.expected_output}
                     </div>
                   </li>
                 ))}
@@ -127,7 +131,7 @@ const TestCaseTabs = ({ problemId }: { problemId: string }) => {
             />
             <button
               className="bg-blue-600 text-white rounded px-4 py-2 mt-4"
-              onClick={(e) => handleBulkSubmit(e, 'post')} // You can change 'post' to 'put' based on your logic
+              onClick={(e) => handleBulkSubmit(e, 'put')} // You can change 'post' to 'put' based on your logic
             >
               Submit Bulk Test Cases
             </button>

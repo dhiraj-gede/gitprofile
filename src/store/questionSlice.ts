@@ -8,15 +8,11 @@ export interface CodeTemplate {
   template: string;
 }
 
-export interface TestCase {
-  input: string;
-  expected_output: string[];
-}
-
 export interface Solution {
   code: string;
   language: string;
 }
+
 export interface Question {
   languages: string[];
   cpp14_template: string;
@@ -30,7 +26,6 @@ export interface QuestionState {
   language: string;
   code: CodeTemplate;
   question: Question | null;
-  testCases: TestCase[]; // Add test cases to state
   solution?: Solution;
   loading: boolean;
   languages: string[];
@@ -48,7 +43,6 @@ const initialState: QuestionState = {
     template: '',
   },
   question: null,
-  testCases: [], // Initialize test cases
   loading: true,
   languages: [],
   currentCode: {
@@ -81,61 +75,6 @@ export const fetchQuestion = createAsyncThunk<
     return rejectWithValue(err.response?.data);
   }
 });
-
-// Thunk to fetch test cases for a question
-export const fetchTestCases = createAsyncThunk<
-  TestCase[],
-  string,
-  { rejectValue: unknown }
->('question/fetchTestCases', async (problemId, { rejectWithValue }) => {
-  try {
-    const response = await axios.get(
-      `http://localhost:5000/api/testcases/${problemId}`,
-    );
-    return response.data.test_cases;
-  } catch (error) {
-    const err = error as AxiosError;
-    return rejectWithValue(err.response?.data);
-  }
-});
-
-// Thunk to submit bulk test cases
-export const submitBulkTestCases = createAsyncThunk<
-  TestCase[],
-  {
-    problemId: string;
-    testCases: TestCase[];
-    sampleTestCases: TestCase[];
-    type: 'put' | 'post';
-  },
-  { rejectValue: unknown }
->(
-  'question/submitBulkTestCases',
-  async (
-    { problemId, testCases, sampleTestCases, type },
-    { rejectWithValue },
-  ) => {
-    try {
-      const payload: {
-        test_cases: TestCase[];
-        sample_test_cases: TestCase[];
-        problemId?: string;
-      } = {
-        test_cases: testCases,
-        sample_test_cases: sampleTestCases,
-      };
-      if (type === 'post') payload.problemId = problemId;
-      const response = await axios[type](
-        `http://localhost:5000/api/testcases/${type === 'put' ? problemId : ''}`,
-        payload,
-      );
-      return response.data.test_cases;
-    } catch (error) {
-      const err = error as AxiosError;
-      return rejectWithValue(err.response?.data);
-    }
-  },
-);
 
 // Create a slice
 const questionSlice = createSlice({
@@ -170,7 +109,11 @@ const questionSlice = createSlice({
       state.slug = action.payload;
     },
     setCurrentCode: (state, action: PayloadAction<CodeTemplate>) => {
-      state.currentCode = action.payload;
+      state.currentCode = {
+        ...action.payload,
+        templateHead: state.code.templateHead,
+        templateTail: state.code.templateTail,
+      };
     },
     setSolution: (state, action: PayloadAction<Solution>) => {
       state.solution = { ...action.payload, language: state.language };
@@ -214,19 +157,7 @@ const questionSlice = createSlice({
       )
       .addCase(fetchQuestion.rejected, (state) => {
         state.loading = false;
-      })
-      .addCase(
-        fetchTestCases.fulfilled,
-        (state, action: PayloadAction<TestCase[]>) => {
-          state.testCases = action.payload;
-        },
-      )
-      .addCase(
-        submitBulkTestCases.fulfilled,
-        (state, action: PayloadAction<TestCase[]>) => {
-          state.testCases = action.payload;
-        },
-      );
+      });
   },
 });
 

@@ -5,7 +5,8 @@ import { Description } from './Description';
 import { Header } from './Header';
 import { LanguageSelector } from './CodeChanger';
 import { CodeEditor } from './CodeEditor';
-import { fetchQuestion, setSlug } from '../../store/questionSlice';
+import { fetchQuestion, setSlug, setSolution } from '../../store/questionSlice';
+import axios from 'axios';
 import './vertical.css';
 import './index.css';
 import { AppDispatch, RootState } from '../../store'; // Import RootState for typing
@@ -14,9 +15,9 @@ const ActionLayout: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
 
   // Typed selector for accessing question state
-  const { question, loading, viewCompleteCode, slug } = useSelector(
-    (state: RootState) => state.question,
-  ); // Type the state with RootState
+  const { question, currentCode, language, loading, viewCompleteCode, slug } =
+    useSelector((state: RootState) => state.question); // Type the state with RootState
+  const { testCases } = useSelector((state: RootState) => state.testCases); // Type the state with RootState
 
   useEffect(() => {
     const slugFromUrl =
@@ -31,7 +32,38 @@ const ActionLayout: React.FC = () => {
   }, [slug, dispatch]);
 
   const handleOnCodeSubmit = async () => {
-    // Code for handling submission, same as before.
+    const fullCode =
+      currentCode.templateHead +
+      currentCode.template +
+      currentCode.templateTail;
+
+    // Prepare the payload for the API
+    const payload = {
+      code: fullCode,
+      language, // Selected language from state
+      test_cases: { test_cases: testCases }, // List of test cases from the state
+    };
+
+    try {
+      // Make the API request to execute the code
+      const response = await axios.post(
+        'http://localhost:5000/api/code/execute',
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`, // Add the token if required
+          },
+        },
+      );
+
+      // Log or handle the results of the code execution
+      console.log('Execution Results:', response.data);
+
+      // Optionally, you can update the state with the solution results
+      dispatch(setSolution({ code: fullCode, language }));
+    } catch (error) {
+      console.error('Code execution failed:', error);
+    }
   };
 
   return (

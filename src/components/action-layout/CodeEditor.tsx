@@ -76,8 +76,9 @@ export const CodeEditor = ({ view, problemId }: CodeEditorProps) => {
     );
   };
   const getCode = (codeObj: currentCode): string => {
-    console.log('currentCode', currentCode);
-    return codeObj.templateHead + codeObj.template + codeObj.templateTail;
+    return view
+      ? codeObj.templateHead + codeObj.template + codeObj.templateTail
+      : codeObj.template;
   };
 
   return (
